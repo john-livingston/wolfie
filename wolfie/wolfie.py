@@ -4,6 +4,9 @@ import rpy2.robjects as robjects
 import rpy2.robjects.numpy2ri
 rpy2.robjects.numpy2ri.activate()
 import pkg_resources
+import warnings
+from rpy2.rinterface import RRuntimeWarning
+warnings.filterwarnings("ignore", category=RRuntimeWarning)
 
 _FP = pkg_resources.resource_filename(__name__, 'R/posterior_samples.savr')
 robjects.r.load(_FP)
@@ -16,8 +19,8 @@ massguess_individpl = robjects.r['massguess_individpl']
 postsamp_eqn2_baseline = rpy2.robjects.r['postsamp_eqn2_baseline']
 
 
-def df_from_params(rstar, urstar, rprs, urprs, numsamples=10000):
-    
+def df_from_params(rstar, urstar, rprs, urprs, numsamples=100000):
+
     """
     rstar : stellar radius in solar units
     urstar : uncertainty in rstar
@@ -37,7 +40,7 @@ def df_from_params(rstar, urstar, rprs, urprs, numsamples=10000):
     return df
 
 
-def df_from_samples(stelrad, ratio, numsamples=10000):
+def df_from_samples(stelrad, ratio, numsamples=100000):
 
     """
     stelrad : samples of the stellar radius in solar units

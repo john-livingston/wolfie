@@ -1,8 +1,8 @@
-## R code that calculates the posterior predictive mass distribution for an individual planet 
+## R code that calculates the posterior predictive mass distribution for an individual planet
 ## using the result of Wolfgang, Rogers, & Ford (2015).  This distribution marginalizes over
 ## the hyperparameter posteriors displayed in Figures 2 and 3 to produce a distribution for
-## the planet\'s possible masses that incorporates these uncertainties (as opposed to 
-## simply using Equation 5).  Likewise, it marginalizes over the distribution of possible 
+## the planet\'s possible masses that incorporates these uncertainties (as opposed to
+## simply using Equation 5).  Likewise, it marginalizes over the distribution of possible
 ## radii that you input.  See README.txt for usage and how to execute this code.
 
 ## Copyright (C) 2015  Angie Wolfgang
@@ -65,8 +65,8 @@ genmass2 <- function(norm,powlaw,sigmam,rad) {
   logmass = powlaw * log(rad) + norm
 
   ## Drawing mass probabilistically, using the parameterized scatter around this mean relation
-  ## and the physical mass constraints (mass > 0 and less than that of a 100% iron planet at the  
-  ## provided radius; equation is inverted from rmf quadratic fit in erratum of Fortney et al. 2007 
+  ## and the physical mass constraints (mass > 0 and less than that of a 100% iron planet at the
+  ## provided radius; equation is inverted from rmf quadratic fit in erratum of Fortney et al. 2007
   ## using rmf = 0).
   MaxM = 10^((-0.4938 + sqrt(0.4938^2-4*0.0975*(0.7932-rad)))/(2*0.0975))
   mass = rnorm.bound(length(rad),exp(logmass),sigmam,lower.bound=0,upper.bound=MaxM)
@@ -90,8 +90,8 @@ genmass3 <- function(norm,powlaw,varm0,varslope,rad) {
   sigmam = sqrt(varm0 + varslope*(rad-1))
 
   ## Drawing mass probabilistically, using the parameterized scatter around this mean relation
-  ## and the physical mass constraints (mass > 0 and less than that of a 100% iron planet at the  
-  ## provided radius; equation is inverted from rmf quadratic fit in erratum of Fortney et al. 2007 
+  ## and the physical mass constraints (mass > 0 and less than that of a 100% iron planet at the
+  ## provided radius; equation is inverted from rmf quadratic fit in erratum of Fortney et al. 2007
   ## using rmf = 0).
   MaxM = 10^((-0.4938 + sqrt(0.4938^2-4*0.0975*(0.7932-rad)))/(2*0.0975))
   mass = rnorm.bound(length(rad),exp(logmass),sigmam,lower.bound=0,upper.bound=MaxM)
@@ -119,10 +119,10 @@ isplanetrocky <- function(rad, mass, likeEarth=FALSE) {
 
 trdepth2rad <- function(stelrad, ratio, ratioerr=0, numsamp=10000, ratioisdepth=TRUE) {
   ## This function computes samples from the planet radius distribution based on a numerical
-  ## stellar radius distribution (assumed to be in units of Sun radii) and a transit depth or   
-  ## radius ratio (which is specified by the ratioisdepth keyword; both inputs should be pure  
+  ## stellar radius distribution (assumed to be in units of Sun radii) and a transit depth or
+  ## radius ratio (which is specified by the ratioisdepth keyword; both inputs should be pure
   ## fractions), which could be either a single number or posterior samples itself.
-  ## Note that if ratio contains posterior samples, ratioerr should remain set to the default  
+  ## Note that if ratio contains posterior samples, ratioerr should remain set to the default
   ## value of zero.  numsamp specifies the number of samples to generate.
 
   ## Drawing from the stellar posterior
@@ -221,7 +221,7 @@ massguess_individpl <- function(sim, numdraws, rad, raderr=0, likeEarth=FALSE) {
     drawindeces = ceiling(runif(numdraws,0,length(rad)))
     raddraws = rad[drawindeces]
     while (sum(raddraws < 0.17) > 0) {
-      print("Warning: extremely small radii (< 0.2 R_Earth)!!  M-R relation not valid!")
+      #print("Warning: extremely small radii (< 0.2 R_Earth)!!  M-R relation not valid!")
       whereradtoosmall = which(raddraws < 0.17)
       raddraws[whereradtoosmall] = rad[ceiling(runif(length(whereradtoosmall),0,length(rad)))]
     }
@@ -253,11 +253,11 @@ massguess_individpl <- function(sim, numdraws, rad, raderr=0, likeEarth=FALSE) {
   ## Calculating which samples yield possibly rocky planets, and plotting a joint posterior predictive
   ## distribution with marginalized mass, radius distributions.
   if (is.numeric(masses)) {
-    plot_individMR(raddraws,masses)
+    #plot_individMR(raddraws,masses)
     isrocky = isplanetrocky(raddraws,masses,likeEarth=likeEarth)
-    print(paste("Fraction of (mass,radius) samples that are more dense than 100% silicate rock:",sum(isrocky)/length(masses)))
+    #print(paste("Fraction of (mass,radius) samples that are more dense than 100% silicate rock:",sum(isrocky)/length(masses)))
   }
- 
-  ## Returning the joint posterior predictive distribution. 
+
+  ## Returning the joint posterior predictive distribution.
   list(radii=raddraws,masses=masses,isrocky=isrocky)
 }

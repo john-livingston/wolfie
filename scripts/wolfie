@@ -17,5 +17,5 @@ rstar, urstar = map(float, args.rstar.split(','))
 rprs, urprs = map(float, args.rprs.split(','))
 
 df = df_from_params(rstar, urstar, rprs, urprs)
-
+print("Fraction of (mass,radius) samples that are more dense than 100% silicate rock:",df.isrocky.sum()/df.shape[0])
 print(df.describe())
