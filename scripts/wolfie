@@ -1,0 +1,21 @@
+#!/usr/bin/env python
+
+import sys
+import argparse
+
+from wolfie import df_from_params
+
+parser = argparse.ArgumentParser(description="Fit K2 light curves")
+parser.add_argument('--rstar', help='Stellar radius [solar] (mu,sig)', type=str, default=None)
+parser.add_argument('--rprs', help='Rp/Rstar (mu,sig)', type=str, default=None)
+args = parser.parse_args()
+
+if args.rstar is None or args.rprs is None:
+    sys.exit('Missing required arguments: --rstar and --rprs')
+
+rstar, urstar = map(float, args.rstar.split(','))
+rprs, urprs = map(float, args.rprs.split(','))
+
+df = df_from_params(rstar, urstar, rprs, urprs)
+
+print(df.describe())
