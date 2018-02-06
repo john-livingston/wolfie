@@ -39,6 +39,19 @@ def df_from_params(rstar, urstar, rprs, urprs, numsamples=100000):
 
     return df
 
+def df_from_params2(rp, urp, numsamples=100000):
+
+    """
+    rp : planet radius [R_Earth]
+    urp : uncertainty in planet radius [R_Earth]
+    numsamples : the number of samples to use for mass prediction
+    """
+
+    rp_s = np.random.randn(numsamples) * urp + rp
+
+    df = df_from_samples2(rp_s, numsamples=numsamples)
+
+    return df
 
 def df_from_samples(stelrad, ratio, numsamples=100000):
 
@@ -61,6 +74,22 @@ def df_from_samples(stelrad, ratio, numsamples=100000):
 
     return df
 
+def df_from_samples2(rp, numsamples=100000):
+
+    """
+    rp : samples of the planet radius [R_Earth]
+    numsamples : the number of samples to use for mass prediction
+    """
+
+    postpred = massguess_individpl(postsamp_eqn2_baseline, numsamples, rad=rp, raderr=0)
+    # calculates the planet mass distribution given the planet radius distribution
+
+    radii = np.array(postpred[0])
+    masses = np.array(postpred[1])
+    isrocky = np.array(postpred[2]).astype(bool)
+    df = pd.DataFrame(dict(radii=radii, masses=masses, isrocky=isrocky))
+
+    return df
 
 if __name__ == '__main__':
 
