@@ -5,7 +5,7 @@ import argparse
 
 from wolfie import df_from_params
 
-parser = argparse.ArgumentParser(description="Fit K2 light curves")
+parser = argparse.ArgumentParser(description="Compute planet masses")
 parser.add_argument('--rstar', help='Stellar radius [solar] (mu,sig)', type=str, default=None)
 parser.add_argument('--rprs', help='Rp/Rstar (mu,sig)', type=str, default=None)
 args = parser.parse_args()
